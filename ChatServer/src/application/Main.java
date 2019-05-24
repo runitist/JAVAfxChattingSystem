@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import application.Model.ClientImple;
+import application.Model.ServerImple;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 	
 	public static ExecutorService threadpool;//여러 스레드를 효율적인 쓰레드풀로 사용하도록 해주는 객체.
-	public static Vector<ClientImple> clients = new Vector<ClientImple>();//여러 클라이언트 객체를 저장관리하는 벡터
+	public static Vector<ServerImple> clients = new Vector<ServerImple>();//여러 클라이언트 객체를 저장관리하는 벡터
 
 	ServerSocket serverSocket;
 	
@@ -45,7 +45,7 @@ public class Main extends Application {
 				while(true) {
 					try {
 						Socket socket = serverSocket.accept();//병렬적으로 반복되며, 클라이언트 요청을 기다림.
-						clients.add(new ClientImple(socket));//요청이 온다면 벡터에 클라이언트 객체를 넣음.
+						clients.add(new ServerImple(socket));//요청이 온다면 벡터에 클라이언트 객체를 넣음.
 						System.out.println("[클라이언트 접속]"+socket.getRemoteSocketAddress()+": "+Thread.currentThread().getName());
 					} catch (Exception e) {
 						if(!serverSocket.isClosed()) {
@@ -64,7 +64,7 @@ public class Main extends Application {
 	//서버 소켓 종료 메소드
 	public void stopServer() {
 		try {
-			Iterator<ClientImple> iterator = clients.iterator();
+			Iterator<ServerImple> iterator = clients.iterator();
 			while (iterator.hasNext()) {
 				iterator.next().socket.close();
 				iterator.remove();

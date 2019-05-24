@@ -8,11 +8,11 @@ import java.net.Socket;
 import application.Main;
 
 
-public class ClientImple implements Client {
+public class ServerImple implements Server {
 	
 	public Socket socket;
 	
-	public ClientImple(Socket socket) {
+	public ServerImple(Socket socket) {
 		this.socket = socket;
 		receive();
 	}
@@ -32,7 +32,7 @@ public class ClientImple implements Client {
 						}
 						System.out.println("[메시지수신 성공]"+socket.getRemoteSocketAddress() +": "+ Thread.currentThread().getName());
 						String message = new String(buffer, 0, length, "UTF-8");
-						for(Client client : Main.clients) {
+						for(Server client : Main.clients) {
 							client.send(message);
 						}
 					}
@@ -63,7 +63,7 @@ public class ClientImple implements Client {
 				} catch (Exception e) {
 					try {
 						System.out.println("메시지 송신 오류"+socket.getRemoteSocketAddress() +": "+ Thread.currentThread());
-						Main.clients.remove(ClientImple.this);
+						Main.clients.remove(ServerImple.this);
 						socket.close();
 					}catch (Exception e2) {
 						e2.printStackTrace();
